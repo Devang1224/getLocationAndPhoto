@@ -17,6 +17,31 @@ export default function CapturesList() {
   const [captures, setCaptures] = useState<CaptureMeta[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  const handleDelete = async (id: string) => {
+    const password = window.prompt("Enter password to delete this capture:");
+    if (password === null) return; // user cancelled
+    setDeletingId(id);
+    try {
+      const res = await fetch(`/api/captures/${encodeURIComponent(id)}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+      });
+      if (res.status === 401) {
+        setError("Wrong password.");
+        return;
+      }
+      if (!res.ok) throw new Error("Delete failed");
+      setError("");
+      setCaptures((prev) => prev.filter((c) => c.id !== id));
+    } catch {
+      setError("Could not delete.");
+    } finally {
+      setDeletingId(null);
+    }
+  };
 
   useEffect(() => {
     fetch("/api/captures")
@@ -77,14 +102,24 @@ export default function CapturesList() {
             <p className="mt-1 text-sm text-zinc-700 dark:text-zinc-300">
               {c.latitude.toFixed(5)}, {c.longitude.toFixed(5)}
             </p>
-            <a
-              href={`https://www.google.com/maps?q=${c.latitude},${c.longitude}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-2 inline-block text-sm font-medium text-emerald-600 hover:underline dark:text-emerald-400"
-            >
-              Open in Google Maps
-            </a>
+            <div className="mt-2 flex flex-wrap items-center gap-2">
+              <a
+                href={`https://www.google.com/maps?q=${c.latitude},${c.longitude}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm font-medium text-emerald-600 hover:underline dark:text-emerald-400"
+              >
+                Open in Google Maps
+              </a>
+              <button
+                type="button"
+                onClick={() => handleDelete(c.id)}
+                disabled={deletingId === c.id}
+                className="text-sm font-medium text-red-600 hover:underline disabled:opacity-50 dark:text-red-400"
+              >
+                {deletingId === c.id ? "Deleting…" : "Delete"}
+              </button>
+            </div>
           </div>
         </li>
       ))}
