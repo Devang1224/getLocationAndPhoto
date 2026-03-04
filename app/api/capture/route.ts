@@ -2,7 +2,11 @@ import { NextResponse } from "next/server";
 import { writeFile, mkdir } from "fs/promises";
 import path from "path";
 
-const CAPTURES_DIR = path.join(process.cwd(), "data", "captures");
+// Serverless (Vercel, Lambda, etc.) only allows writing to /tmp
+const CAPTURES_DIR =
+  process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME
+    ? path.join("/tmp", "captures")
+    : path.join(process.cwd(), "data", "captures");
 
 export async function POST(request: Request) {
   try {
