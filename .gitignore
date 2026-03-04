@@ -20,6 +20,9 @@
 # production
 /build
 
+# captured data (location + photos)
+/data/
+
 # misc
 .DS_Store
 *.pem
